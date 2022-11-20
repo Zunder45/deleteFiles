@@ -1,6 +1,14 @@
 import sys, os, shutil, time
 import conf
 
+def chkExcept(path):
+  for i in conf.exceptions_path:
+    if path == os.path.abspath(i):
+      print('! ' + i)
+      return True
+    else:
+      continue
+  return False
 
 def getProfile():
 
@@ -29,22 +37,26 @@ def delFiles(profile):
     if os.path.exists(item[0]):
       if item[1] == "": # Простое удаление корневого каталога 
         fileName = item[0]
-        if os.path.isdir(fileName):
-            shutil.rmtree(fileName)
-            print(fileName, ' уделен!')
-        else:
-          os.remove(fileName)
-          print(fileName)
-        
+        if not chkExcept(fileName): # поиск в исключениях
+          if os.path.isdir(fileName):
+              shutil.rmtree(fileName)
+              print('X ' + fileName)
+          else:
+            os.remove(fileName)
+            print('X ' + fileName)
+      
       if item[1] == "R": # рекурсивное удаление каталога (корневой каталог остается)
         for f in os.listdir(item[0]):
           fileName = os.path.join(item[0],f)
-          if os.path.isdir(fileName):
-            shutil.rmtree(fileName)
-            print(fileName, ' уделен!')
-          else:
-            os.remove(fileName)
-            print(fileName)
+          if not chkExcept(fileName): # поиск в исключениях
+            if os.path.isdir(fileName):
+              shutil.rmtree(fileName)
+              print('X ' + fileName)
+            else:
+              os.remove(fileName)
+              print('X ' + fileName)
+    else: 
+      print("файла нет")
 
 
 def main():  

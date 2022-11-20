@@ -6,12 +6,10 @@
 #   ],
 #   '1':[['...','']]
 # }
-exceptions = []
+exceptions_path = []
 
 pathDir = {
   'def': [
-    ['/home/qwerty/Pyscpt/test/test1/',''],
-    ['/home/qwerty/Pyscpt/test/test2','R']
-  ],
-  '1':[['/home/qwerty/Pyscpt/test/ffffff/','']]
+    ['PATH','MODE']
+  ]]
 }
