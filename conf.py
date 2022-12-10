@@ -9,7 +9,5 @@
 exceptions_path = []
 
 pathDir = {
-  'def': [
-    ['PATH','MODE']
-  ]]
+  'def': [["Путь","Режим"]]
 }

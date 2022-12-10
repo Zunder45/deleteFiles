@@ -1,4 +1,15 @@
-import sys, os, shutil, time
+"""
+  1.0
+--------
+  -h: Помощь
+  -v: Версия
+  -p: Выбор профиля
+  -l: Список профилей
+ -la: Список файлов м кталогов
+"""
+
+import sys, os, shutil
+from time import sleep
 import conf
 
 def chkExcept(path):
@@ -10,25 +21,34 @@ def chkExcept(path):
       continue
   return False
 
-def getProfile():
-
+def getProfile(indexArg = ""):
   args = sys.argv
-  prf = ""
-  index = 0
-
-  for arg in args: #поиск аргументов
-    if arg == "-p":
-      if index != len(args)-1:
-        prf = args[index+1] 
-    index = index + 1
-
-  if prf == "" or prf  not in conf.pathDir:
+  if not indexArg == "":
+    if not indexArg >= len(args) - 1:
+      prf = args[indexArg +1] #значеие аргумента (-p *путь*)(путь - индекс ключа + 1)
+      if prf == "" or prf not in conf.pathDir: # значение ключа пустое или его нет в списке
+        print("Профиль: " + "def")
+        return "def"
+      else: 
+        print("Профиль: " + prf)
+        return prf
+    else:
+      print("Профиль: " + "def")
+      return "def"
+  else: 
     print("Профиль: " + "def")
     return "def"
-  else: 
-    print("Профиль: " + prf)
-    return prf
 
+def showListPof():
+  for prf in conf.pathDir:
+    print(prf)  
+      
+def showListPofFull():
+  for prf in conf.pathDir:
+    print(prf)
+    listDirs = conf.pathDir[prf]
+    for dirs in listDirs:
+      print(dirs)
 
 def delFiles(profile):
   #удаление файлов
@@ -58,10 +78,42 @@ def delFiles(profile):
     else: 
       print("файла нет")
 
+def showHelp():
+  print(__doc__)
 
-def main():  
-  delFiles(getProfile())
+def showVer():
+  print(__doc__.replace(" ","").split("\n")[1])
+
+
+def main(): 
+  args = sys.argv 
+  prof = ""
+
+  if "-h" in args:
+    showHelp()
+    exit()
+  elif "-l" in args:
+    showListPof()
+    exit()
+  elif "-la" in args:
+    showListPofFull()
+    exit()  
+  elif "-v" in args:
+    showVer()
+    exit()
+  elif "-p" in args:
+    index = args.index("-p")
+    if not index == len(args)-1: 
+      prof = getProfile(index)
+    else:
+        prof = getProfile() 
+  else:
+    prof = getProfile() 
+
+  delFiles(prof)
+
   print("OK")
-  # time.sleep(2)
+  # sleep(2)
 
-main()
+if __name__ == "__main__":
+  main()
